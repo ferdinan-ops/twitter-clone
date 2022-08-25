@@ -41,7 +41,6 @@ export default function Home({ trendingResult, followResult, providers }) {
       <main className="mx-auto flex min-h-screen max-w-[1500px] bg-black">
         <Sidebar />
         <Feed />
-        {session.user.name}
         {/* Widget */}
 
         {/* Modal */}

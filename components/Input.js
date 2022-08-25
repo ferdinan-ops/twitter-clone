@@ -1,9 +1,22 @@
-import { CalendarIcon, ChartBarIcon, EmojiHappyIcon, PhotographIcon, XIcon } from "@heroicons/react/outline";
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import {
+  CalendarIcon,
+  ChartBarIcon,
+  EmojiHappyIcon,
+  PhotographIcon,
+  XIcon,
+} from "@heroicons/react/outline";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import React, { useRef, useState } from "react";
 import { storage, db } from "config/firebase";
 import Picker from "@emoji-mart/react";
+import { useSession } from "next-auth/react";
 
 function Input() {
   // handler textarea
@@ -21,6 +34,9 @@ function Input() {
   // reference input file to img icon
   const filePickerRef = useRef(null);
 
+  // data user
+  const { data: session } = useSession();
+
   // sending posts to firestore function
   const sendPost = async () => {
     if (loading) return;
@@ -28,6 +44,10 @@ function Input() {
 
     // create new posts using firestore function in posts collection
     const docRef = await addDoc(collection(db, "posts"), {
+      id: session.user.uid,
+      username: session.user.name,
+      userImg: session.user.image,
+      tag: session.user.tag,
       text: input,
       timestamp: serverTimestamp(), // make beautifull timestamp
     });
@@ -62,13 +82,20 @@ function Input() {
     // simpan url img ke state agar img preview muncul
     reader.onload = (readerEvent) => {
       setSelectedFile(readerEvent.target.result);
-    }
+    };
   };
 
-
   return (
-    <div className={`flex space-x-3 overflow-y-scroll border-b border-gray-700 p-3 ${loading && "opacity-60"}`}>
-      <img src="/profile.jpg" alt="" className="h-11 w-11 cursor-pointer rounded-full" />
+    <div
+      className={`flex space-x-3 overflow-y-scroll border-b border-gray-700 p-3 scrollbar-hide  ${
+        loading && "opacity-60"
+      }`}
+    >
+      <img
+        src={session.user.image}
+        alt=""
+        className="h-11 w-11 cursor-pointer rounded-full"
+      />
       <div className="w-full divide-y divide-gray-800">
         <div className={`${selectedFile && "pb-7"} ${input && "space-y-2.5"}`}>
           <textarea
@@ -87,19 +114,30 @@ function Input() {
               >
                 <XIcon className="h-5 text-white" />
               </div>
-              <img src={selectedFile} alt="" className="max-h-80 rounded-2xl object-contain" />
+              <img
+                src={selectedFile}
+                alt=""
+                className="max-h-80 rounded-2xl object-contain"
+              />
             </div>
           )}
-
         </div>
 
         {/* Bottom Input icon */}
-        {!loading &&
+        {!loading && (
           <div className="flex items-center justify-between pt-2.5">
             <div className="flex items-center">
-              <div className="icon" onClick={() => filePickerRef.current.click()}>
+              <div
+                className="icon"
+                onClick={() => filePickerRef.current.click()}
+              >
                 <PhotographIcon className="h-[22px] text-primary" />
-                <input type="file" onChange={addImageToPost} ref={filePickerRef} hidden />
+                <input
+                  type="file"
+                  onChange={addImageToPost}
+                  ref={filePickerRef}
+                  hidden
+                />
               </div>
 
               <div className="icon rotate-90">
@@ -118,7 +156,10 @@ function Input() {
               {showEmojis && (
                 <div className="absolute mt-[465px] -ml-10 overflow-hidden rounded-3xl">
                   {/* add emoji to textarea field function */}
-                  <Picker theme="dark" onEmojiSelect={(e) => setInput(input + e.native)} />
+                  <Picker
+                    theme="dark"
+                    onEmojiSelect={(e) => setInput(input + e.native)}
+                  />
                 </div>
               )}
             </div>
@@ -132,8 +173,7 @@ function Input() {
               Tweet
             </button>
           </div>
-        }
-
+        )}
       </div>
     </div>
   );
