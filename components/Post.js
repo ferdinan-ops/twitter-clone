@@ -38,7 +38,7 @@ function Post({ id, post, postPage }) {
     onSnapshot(query(collection(db, "posts", id, "comments")), (snapshot) => {
       setComments(snapshot.docs);
     });
-  }, [db, id]);
+  }, [id]);
 
   useEffect(() => {
     // mengambil banyak dari like berdasarkan uid session
@@ -49,7 +49,7 @@ function Post({ id, post, postPage }) {
     onSnapshot(collection(db, "posts", id, "likes"), (snapshot) =>
       setLikes(snapshot.docs)
     );
-  }, [db, id]);
+  }, [id]);
 
   const handlerComment = (e) => {
     e.stopPropagation();
@@ -69,9 +69,6 @@ function Post({ id, post, postPage }) {
     } catch (error) {
       console.log(error);
     }
-
-    deleteDoc(doc(db, "posts", id)); // menghapus posts
-    Router.push("/");
   };
 
   const likePost = async (e) => {

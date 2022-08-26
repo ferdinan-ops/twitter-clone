@@ -7,7 +7,13 @@ import { useRecoilState } from "recoil";
 import { modalState } from "atoms/moduleAtom";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "config/firebase";
 import { ArrowLeftIcon } from "@heroicons/react/outline";
 import Post from "@components/Post";
@@ -47,13 +53,21 @@ export default function Home({ trendingResult, followResult, providers }) {
   // put the data from firestore where id is same with id the users clicked
   useEffect(() => {
     onSnapshot(doc(db, "posts", id), (snapshot) => setPost(snapshot.data()));
-  }, [db, id]);
+  }, [id]);
 
-  useEffect(() => {
-    onSnapshot(collection(db, "posts", id, "comments"), (snapshot) =>
-      setComments(snapshot.docs)
-    );
-  }, [db, id]);
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, "posts", id, "comments"),
+          orderBy("timestamp", "desc")
+        ),
+        (snapshot) => {
+          setComments(snapshot.docs);
+        }
+      ),
+    [id]
+  );
 
   if (!session) return <Login providers={providers} />;
 
