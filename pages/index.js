@@ -1,11 +1,12 @@
 import Head from "next/head";
 import Sidebar from "@components/Sidebar";
+import Modal from "@components/Modal";
 import Feed from "@components/Feed";
 import { getProviders, getSession, useSession } from "next-auth/react";
 import Login from "@components/Login";
-import Modal from "@components/Modal";
 import { useRecoilState } from "recoil";
 import { modalState } from "atoms/moduleAtom";
+import Widget from "@components/Widget";
 
 export async function getServerSideProps(ctx) {
   // Fetching data api widget trending
@@ -46,8 +47,7 @@ export default function Home({ trendingResult, followResult, providers }) {
       <main className="mx-auto flex min-h-screen max-w-[1500px] bg-black">
         <Sidebar />
         <Feed />
-        {/* Widget */}
-
+        <Widget trendingResult={trendingResult} followResult={followResult} />
         {isOpen && <Modal />}
       </main>
     </>

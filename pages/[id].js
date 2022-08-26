@@ -12,6 +12,7 @@ import { db } from "config/firebase";
 import { ArrowLeftIcon } from "@heroicons/react/outline";
 import Post from "@components/Post";
 import Comment from "@components/Comment";
+import Widget from "@components/Widget";
 
 export async function getServerSideProps(ctx) {
   // Fetching data api widget trending
@@ -92,7 +93,7 @@ export default function Home({ trendingResult, followResult, providers }) {
           )}
         </div>
 
-        {/* Widget */}
+        <Widget followResult={followResult} trendingResult={trendingResult} />
 
         {isOpen && <Modal />}
       </main>

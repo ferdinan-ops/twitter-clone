@@ -114,11 +114,6 @@ function Modal() {
                       <p className="text-[15px] text-secondary sm:text-base">
                         {post?.text}
                       </p>
-                      <img
-                        src={post?.image}
-                        alt=""
-                        className="mr-2 mt-2 max-h-[750px] rounded-2xl object-cover"
-                      />
                     </div>
                   </div>
 
