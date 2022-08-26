@@ -3,6 +3,9 @@ import Sidebar from "@components/Sidebar";
 import Feed from "@components/Feed";
 import { getProviders, getSession, useSession } from "next-auth/react";
 import Login from "@components/Login";
+import Modal from "@components/Modal";
+import { useRecoilState } from "recoil";
+import { modalState } from "atoms/moduleAtom";
 
 export async function getServerSideProps(ctx) {
   // Fetching data api widget trending
@@ -27,8 +30,10 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Home({ trendingResult, followResult, providers }) {
-  // Membuat redirect session
   const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
+
+  // Membuat redirect session
   if (!session) return <Login providers={providers} />;
 
   return (
@@ -43,7 +48,7 @@ export default function Home({ trendingResult, followResult, providers }) {
         <Feed />
         {/* Widget */}
 
-        {/* Modal */}
+        {isOpen && <Modal />}
       </main>
     </>
   );

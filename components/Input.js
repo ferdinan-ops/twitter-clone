@@ -95,6 +95,7 @@ function Input() {
         src={session.user.image}
         alt=""
         className="h-11 w-11 cursor-pointer rounded-full"
+        referrerPolicy="no-referrer"
       />
       <div className="w-full divide-y divide-gray-800">
         <div className={`${selectedFile && "pb-7"} ${input && "space-y-2.5"}`}>

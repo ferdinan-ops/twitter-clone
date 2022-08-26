@@ -14,7 +14,7 @@
   }
 
   .hoverLogoAnimation {
-    @apply hoverAnimation hover:-rotate-12 hover:scale-105;
+    @apply hoverAnimation hover:-rotate-12 hover:scale-105 hover:text-primary;
   }
 
   .icon {

@@ -43,12 +43,15 @@ function Sidebar() {
           src={session.user.image}
           alt=""
           className="h-10 w-10 rounded-full xl:mr-2.5"
+          referrerPolicy="no-referrer"
         />
         <div className="hidden leading-5 xl:inline">
           <h4 className="max-w-[88px] truncate font-bold">
             {session.user.name}
           </h4>
-          <p className="text-[#6e767d] max-w-[88px] truncate">@{session.user.tag}</p>
+          <p className="max-w-[88px] truncate text-[#6e767d]">
+            @{session.user.tag}
+          </p>
         </div>
         <DotsHorizontalIcon className="ml-10 hidden h-5 xl:inline" />
       </div>
